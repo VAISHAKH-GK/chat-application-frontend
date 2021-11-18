@@ -1,0 +1,29 @@
+#headerMain{
+    width :300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media  (max-width :767px) {
+    
+    #headerMain{
+        width :300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width:984px) {
+    #headerMain{
+        width :300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (min-width:985px){
+    #headerMain{
+        width :400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
