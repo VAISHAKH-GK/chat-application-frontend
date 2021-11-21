@@ -10,7 +10,7 @@ function Header({ setclassName }) {
 
     const history = useHistory();
 
-    const { setlogin, setlogout, setuserDetails } = useContext(Context);
+    const { setlogin, setlogout, setuserDetails,setroom,setDm,setWho,setRoomName } = useContext(Context);
     const [side, setside] = useState(false);
 
     function logout() {
@@ -18,6 +18,11 @@ function Header({ setclassName }) {
             setlogin(false);
             setlogout(true);
             setuserDetails({});
+            setroom();
+            setDm(false);
+            setWho('');
+            setRoomName('');
+            
             history.push('/login');
         });
     }
