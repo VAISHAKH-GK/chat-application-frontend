@@ -3,7 +3,7 @@ import '../../../Style.css';
 import { Context } from '../../../Context'
 
 
-function Sidebar() {
+function Sidebar({className}) {
 
 
     const [showU, setShowU] = useState(false);
@@ -15,7 +15,7 @@ function Sidebar() {
 
     return (
         <div>
-            <div className="chat-sidebar">
+            <div className={className.sidebar}>
                 <hr />
                 <h3><i className="fas fa-comments" ></i> <p className="link" onClick={e => { setroom(null); setDm(false); setRoomName(''); setdmuser(); }} style={{ textDecoration: 'none', color: 'white' }} > {userDetails ? userDetails.userName : ''} </p></h3>
                 <hr />

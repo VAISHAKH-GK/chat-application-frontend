@@ -48,7 +48,9 @@ a {
 	overflow: hidden;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 100px;
+	margin-top: 5%;
+	margin-bottom: 5%;
+
 }
 
 .chat-header {
@@ -234,3 +236,37 @@ a {
 
 }
 
+.menu-icon{
+	display: none;
+}
+.hide{
+	background: var(--dark-color-b);
+	color: #fff;
+	padding: 20px 20px 60px;
+	overflow-y: scroll;
+	height: 578px;
+}
+
+@media (max-width: 700px){
+
+	.menu-icon{
+		display :inline;
+	}
+	.chat-sidebar{
+		z-index: 2;
+		display: grid;
+	}
+
+	.hide{
+		display: none;
+	}
+
+	.chat-container{
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+}
+
+.button-logout{
+	margin-left: auto;
+}

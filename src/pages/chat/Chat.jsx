@@ -15,8 +15,10 @@ function Chat() {
 
 
 
-    const { messages, setMessages, room, setroom, dm, setDm, dmuser,setdmuser, who, setWho, channels, setchannels, users,
-         setusers, friendRequests, setFriendRequests, roomName, setRoomName, friends, setFriends,userDetails, setlogout, setuserDetails, setlogin  } = useContext(Context);
+    const {  setMessages, room,  dm,  dmuser,  who, setWho,  setchannels, 
+        setusers,  setFriendRequests, roomName,  setFriends, userDetails, setlogout, setuserDetails, setlogin } = useContext(Context);
+
+    const [className, setclassName] = useState({sidebar:"hide",showmc:true});
 
     function message(msg) {
         var ms = {
@@ -195,11 +197,11 @@ function Chat() {
     return (
         <div>
             <div className="chat-container">
-                <Header  />
+                <Header setclassName={setclassName} />
                 <main className="chat-main">
-                    <Sidebar />
+                    <Sidebar className={className} />
                     <div>
-                        {room ? !dm ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
+                        {className.showmc ?room ? !dm ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
                             <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto btn" style={{ "marginBottom": '0' }} > Delete Channel </p> </div>
 
                             : who === 'blockedyou' ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
@@ -219,13 +221,13 @@ function Chat() {
                                             : ''
                             : <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "height": "78px" }}>
 
-                            </div>}
+                            </div> : ''}
 
-                        <Messages  />
+                        {className.showmc ? <Messages /> : ''}
                     </div>
                 </main>
-                {room ? dm ? who !== 'blockedyou' ? who !== 'blocked' ? <ChatFrom  message={message} /> : '' : '' :
-                    <ChatFrom message={message} /> : ''}
+                {className.showmc ?  room ? dm ? who !== 'blockedyou' ? who !== 'blocked' ? <ChatFrom message={message} /> : '' : '' :
+                    <ChatFrom message={message} /> : '' : ''}
             </div>
         </div>
     )
