@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../../Style.css';
 import '../../Signin.css';
+import { Context } from '../../Context'
 
-function Login(props) {
+function Login() {
 
     const history = useHistory();
     const [user, setuser] = useState('');
     const [password, setpassword] = useState('');
-    const [wrong , setWrong] = useState();
+    const [wrong, setWrong] = useState();
 
+    const { setlogin } = useContext(Context);
 
     function submit(e) {
         e.preventDefault();
         // console.log(e);
         const details = { userName: user, Password: password };
         axios.post('/login', details).then((res) => {
-            if(!res.data.wrong){
-                props.setlogin(true);
-                history.push('/'); 
+            if (!res.data.wrong) {
+                setlogin(true);
+                history.push('/');
             } else {
                 setuser('');
                 setpassword('');
@@ -32,12 +34,12 @@ function Login(props) {
     return (
         <div>
             <section className="row" >
-                <div className="container" style={{ "marginTop": "25vh"}} >
+                <div className="container" style={{ "marginTop": "25vh" }} >
                     <div className="col-md-6 col-12 mx-auto">
                         <form onSubmit={submit} >
                             <div className="mb-3">
                                 <h1 className="mx-auto" style={{ "width": "125px" }}>LOGIN</h1>
-                            </div> 
+                            </div>
                             <p className="error" style={{ "color": "red" }}>{wrong}</p>
                             <div className="mb-3">
                                 <label className="form-label">User Name</label>

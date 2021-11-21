@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Chat from './pages/chat/Chat';
 import Login from './pages/login/Login';
 import axios from 'axios';
 import Signup from './pages/signup/Signup';
+import { Context } from './Context';
+
 
 function App() {
 
-    const [login, setlogin] = useState(false);
-    const [logeout, setlogout] = useState(false);
-    const [userDetails, setuserDetails] = useState(null);
+    const { login, logeout, setlogin, setlogout ,setuserDetails } = useContext(Context);
 
     useEffect(() => {
 
@@ -31,10 +31,10 @@ function App() {
 
         <Router>
             <Route exact path="/">
-                {login ? <Chat setlogin={setlogin} setlogout={setlogout} setuserDetails={setuserDetails} userDetails={userDetails} /> : logeout ? <Login setlogin={setlogin} /> : ''}
+                {login ? <Chat /> : logeout ? <Login  /> : ''}
             </Route>
             <Route exact path="/login">
-                <Login setlogin={setlogin} />
+                <Login />
             </Route>
             <Route exact path="/signup">
                 <Signup />

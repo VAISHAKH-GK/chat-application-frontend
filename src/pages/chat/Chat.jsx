@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import Header from './header/Header';
@@ -6,25 +6,17 @@ import '../../Style.css';
 import Messages from './messages/Messages';
 import Sidebar from './sideBar/Sidebar';
 import ChatFrom from './chat-form/ChatFrom';
+import { Context } from '../../Context';
 
 
 const socket = io('http://localhost:9000');
 
-function Chat({ userDetails, setlogout, setuserDetails, setlogin }) {
-
-    const [messages, setMessages] = useState([]);
-    const [room, setroom] = useState();
-    const [dm, setDm] = useState(false);
-    const [dmuser, setdmuser] = useState('');
-    const [who, setWho] = useState('');
-
-    const [channels, setchannels] = useState([]);
-    const [users, setusers] = useState([]);
-    const [friendRequests, setFriendRequests] = useState([]);
-    const [roomName, setRoomName] = useState('');
-    const [friends, setFriends] = useState([]);
+function Chat() {
 
 
+
+    const { messages, setMessages, room, setroom, dm, setDm, dmuser,setdmuser, who, setWho, channels, setchannels, users,
+         setusers, friendRequests, setFriendRequests, roomName, setRoomName, friends, setFriends,userDetails, setlogout, setuserDetails, setlogin  } = useContext(Context);
 
     function message(msg) {
         var ms = {
@@ -203,9 +195,9 @@ function Chat({ userDetails, setlogout, setuserDetails, setlogin }) {
     return (
         <div>
             <div className="chat-container">
-                <Header setlogout={setlogout} setlogin={setlogin} setuserDetails={setuserDetails} />
+                <Header  />
                 <main className="chat-main">
-                    <Sidebar userDetails={userDetails} room={room} setRoomName={setRoomName} friends={friends} setDm={setDm} channels={channels} users={users} friendRequests={friendRequests} setdmuser={setdmuser} setWho={setWho} setroom={setroom} />
+                    <Sidebar />
                     <div>
                         {room ? !dm ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
                             <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto btn" style={{ "marginBottom": '0' }} > Delete Channel </p> </div>
@@ -229,11 +221,11 @@ function Chat({ userDetails, setlogout, setuserDetails, setlogin }) {
 
                             </div>}
 
-                        <Messages msg={true} userDetails={userDetails} messages={messages} dm={dm} setDm={setDm} setMessages={setMessages} />
+                        <Messages  />
                     </div>
                 </main>
-                {room ? dm ? who !== 'blockedyou' ? who !== 'blocked' ? <ChatFrom userDetails={userDetails} socket message={message} /> : '' : '' :
-                    <ChatFrom userDetails={userDetails} socket message={message} /> : ''}
+                {room ? dm ? who !== 'blockedyou' ? who !== 'blocked' ? <ChatFrom  message={message} /> : '' : '' :
+                    <ChatFrom message={message} /> : ''}
             </div>
         </div>
     )
