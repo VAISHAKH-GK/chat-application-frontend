@@ -15,10 +15,12 @@ function Chat() {
 
 
 
-    const {  setMessages, room,  dm,  dmuser,  who, setWho,  setchannels, 
-        setusers,  setFriendRequests, roomName,  setFriends, userDetails, setlogout, setuserDetails, setlogin } = useContext(Context);
+    const { setMessages, room, dm, dmuser, who, setWho, setchannels,
+        setusers, setFriendRequests, roomName, setFriends, userDetails, setlogout, setuserDetails, setlogin } = useContext(Context);
 
-    const [className, setclassName] = useState({sidebar:"hide",showmc:true});
+    const [className, setclassName] = useState({ sidebar: "chat-sidebar", showmc: 'hidemsg', hideall: 'hide-all' });
+    const [side, setside] = useState(true);
+
 
     function message(msg) {
         var ms = {
@@ -34,6 +36,20 @@ function Chat() {
             socket.emit("message", ms);
         }
     }
+
+    function changeDisplay() {
+        setside(true);
+
+
+    }
+
+    useEffect(() => {
+        if (!side) {
+            setclassName({ sidebar: "hide", showmc: 'chat-messages', hideall: '' });
+        } else if (side) {
+            setclassName({ sidebar: "chat-sidebar", showmc: 'hidemsg', hideall: 'hide-all' });
+        }
+    }, [side]);
 
     useEffect(() => {
         if (userDetails && Object.keys(userDetails).length > 0) {
@@ -197,37 +213,42 @@ function Chat() {
     return (
         <div>
             <div className="chat-container">
-                <Header setclassName={setclassName} />
+                <Header setclassName={setclassName} side={side} setside={setside} changeDisplay={changeDisplay} />
                 <main className="chat-main">
-                    <Sidebar className={className} />
+                    <Sidebar className={className} setside={setside} side={side} />
                     <div>
-                        {className.showmc ?room ? !dm ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
-                            <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto btn" style={{ "marginBottom": '0' }} > Delete Channel </p> </div>
+                        <div className={className.hideall}>
+                            {room ? !dm ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
+                                <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto btn" style={{ "marginBottom": '0' }} > Delete Channel </p> </div>
 
-                            : who === 'blockedyou' ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
-                                <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto " style={{ "marginBottom": '0', backgroundColor: 'yellow', color: 'red', fontSize: '19px', padding: '5px' }} > This user blocked you </p> </div> : who === 'stranger' ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
-                                    <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto btn" style={{ "marginBottom": '0' }} onClick={() => { blockUser() }} > Block </p>  <p onClick={e => addFriend()} className="ml-auto btn" style={{ "marginBottom": '0', 'marginLeft': '5px' }} >  Add Friend </p> </div> : who === 'friend' ?
-                                <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
-                                    <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p onClick={e => removeFriend()} className="ml-auto btn" style={{ "marginBottom": '0' }} >  Remove friend </p> </div> : who === 'requestsend' ?
+                                : who === 'blockedyou' ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
+                                    <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto " style={{ "marginBottom": '0', backgroundColor: 'yellow', color: 'red', fontSize: '19px', padding: '5px' }} > This user blocked you </p> </div> : who === 'stranger' ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
+                                        <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto btn" style={{ "marginBottom": '0' }} onClick={() => { blockUser() }} > Block </p>  <p onClick={e => addFriend()} className="ml-auto btn" style={{ "marginBottom": '0', 'marginLeft': '5px' }} >  Add Friend </p> </div> : who === 'friend' ?
                                     <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
-                                        <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p>   <p onClick={e => cancelFriendRequest()} className="ml-auto btn" style={{ "marginBottom": '0' }} >  Cancel request </p> </div> : who === 'requestreceive' ?
+                                        <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p onClick={e => removeFriend()} className="ml-auto btn" style={{ "marginBottom": '0' }} >  Remove friend </p> </div> : who === 'requestsend' ?
                                         <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
-                                            <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p>   <p onClick={e => acceptFriendRequest()} className="ml-auto btn" style={{ "marginBottom": '0', 'marginLeft': '5px' }} >  Accept request </p>
-                                            <p className="ml-auto btn" style={{ "marginBottom": '0', 'marginLeft': '5px' }} onClick={e => rejectFriendRequest()} > Reject Friend request </p> </div> : who === 'blocked' ?
+                                            <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p>   <p onClick={e => cancelFriendRequest()} className="ml-auto btn" style={{ "marginBottom": '0' }} >  Cancel request </p> </div> : who === 'requestreceive' ?
                                             <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
-                                                <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p>
-                                                <p className="ml-auto btn" style={{ "marginBottom": '0' }} onClick={() => { unBlockUser() }} > Un-Block </p>
-                                            </div>
-                                            : ''
-                            : <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "height": "78px" }}>
+                                                <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p>   <p onClick={e => acceptFriendRequest()} className="ml-auto btn" style={{ "marginBottom": '0', 'marginLeft': '5px' }} >  Accept request </p>
+                                                <p className="ml-auto btn" style={{ "marginBottom": '0', 'marginLeft': '5px' }} onClick={e => rejectFriendRequest()} > Reject Friend request </p> </div> : who === 'blocked' ?
+                                                <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
+                                                    <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p>
+                                                    <p className="ml-auto btn" style={{ "marginBottom": '0' }} onClick={() => { unBlockUser() }} > Un-Block </p>
+                                                </div>
+                                                : ''
+                                : <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "height": "78px" }}>
 
-                            </div> : ''}
+                                </div>}
+                        </div>
 
-                        {className.showmc ? <Messages /> : ''}
+                        {<Messages hideall={className.hideall} />}
                     </div>
                 </main>
-                {className.showmc ?  room ? dm ? who !== 'blockedyou' ? who !== 'blocked' ? <ChatFrom message={message} /> : '' : '' :
-                    <ChatFrom message={message} /> : '' : ''}
+                <div className={className.hideall} >
+                    {room ? dm ? who !== 'blockedyou' ? who !== 'blocked' ? <ChatFrom message={message} /> : '' : '' :
+                        <ChatFrom message={message} /> : ''}
+                </div>
+
             </div>
         </div>
     )

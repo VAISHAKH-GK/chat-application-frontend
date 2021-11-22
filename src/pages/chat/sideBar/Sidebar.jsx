@@ -3,7 +3,7 @@ import '../../../Style.css';
 import { Context } from '../../../Context'
 
 
-function Sidebar({className}) {
+function Sidebar({className,setside,side,hideall}) {
 
 
     const [showU, setShowU] = useState(false);
@@ -14,7 +14,7 @@ function Sidebar({className}) {
     const {setroom,userDetails,setRoomName,friends,setDm,channels,users,friendRequests,setdmuser } = useContext(Context);
 
     return (
-        <div>
+        <div className={hideall}>
             <div className={className.sidebar}>
                 <hr />
                 <h3><i className="fas fa-comments" ></i> <p className="link" onClick={e => { setroom(null); setDm(false); setRoomName(''); setdmuser(); }} style={{ textDecoration: 'none', color: 'white' }} > {userDetails ? userDetails.userName : ''} </p></h3>
@@ -26,7 +26,7 @@ function Sidebar({className}) {
                         <ul id="users">
                             <hr />
                             {users.map((user, i) => {
-                                return (<li key={i} onClick={() => { setroom(user._id); setDm(true); setdmuser(user._id); setRoomName(user.userName); }} >{user.userName}</li>)
+                                return (<li key={i} onClick={() => { setroom(user._id);setside(false); setDm(true); setdmuser(user._id); setRoomName(user.userName); }} >{user.userName}</li>)
                             })}
                         </ul>
 
@@ -40,7 +40,7 @@ function Sidebar({className}) {
                             <hr />
                             {channels.map((obj, index) => {
                                 return (
-                                    <li key={index}><p id="channels" onClick={() => { setroom(obj._id); setDm(false); setRoomName(obj.name); }} >{obj.name}</p></li>
+                                    <li key={index}><p id="channels" onClick={() => { setroom(obj._id); setside(false); setDm(false); setRoomName(obj.name); }} >{obj.name}</p></li>
                                 )
                             })}
                         </ul>
@@ -54,7 +54,7 @@ function Sidebar({className}) {
                             <hr />
                             {friendRequests.map((user, index) => {
                                 return (
-                                    <li key={index}><p id="channels" onClick={() => { setroom(user._id); setDm(true); setdmuser(user._id); setRoomName(user.userName); }} >{user.userName}</p></li>
+                                    <li key={index}><p id="channels" onClick={() => { setroom(user._id); setside(false); setDm(true); setdmuser(user._id); setRoomName(user.userName); }} >{user.userName}</p></li>
                                 )
                             })}
                         </ul>
@@ -67,7 +67,7 @@ function Sidebar({className}) {
                         <ul id="users">
                             <hr />
                             {friends.map((user, i) => {
-                                return (<li key={i} onClick={() => { setroom(user._id); setDm(true); setdmuser(user._id); setRoomName(user.userName); }} >{user.userName}</li>)
+                                return (<li key={i} onClick={() => { setroom(user._id); setDm(true); setside(false); setdmuser(user._id); setRoomName(user.userName); }} >{user.userName}</li>)
                             })}
                         </ul>
 

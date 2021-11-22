@@ -247,6 +247,15 @@ a {
 	height: 578px;
 }
 
+.hidemsg{
+	padding-right: 30px;
+	padding-bottom: 30px;
+	padding-left: 30px;
+	min-height: 500px;
+	overflow-y: scroll;
+}
+
+
 @media (max-width: 700px){
 
 	.menu-icon{
@@ -264,6 +273,14 @@ a {
 	.chat-container{
 		margin-top: 0;
 		margin-bottom: 0;
+	}
+
+	.hidemsg{
+		display: none;
+	}
+
+	.hide-all{
+		display: none	;	
 	}
 }
 
