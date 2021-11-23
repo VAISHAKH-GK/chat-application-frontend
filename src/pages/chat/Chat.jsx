@@ -20,6 +20,7 @@ function Chat() {
 
     const [className, setclassName] = useState({ sidebar: "chat-sidebar", showmc: 'hidemsg', hideall: 'hide-all' });
     const [side, setside] = useState(true);
+    const [CreateC, setCreateC] = useState(false);
 
 
     function message(msg) {
@@ -39,8 +40,6 @@ function Chat() {
 
     function changeDisplay() {
         setside(true);
-
-
     }
 
     useEffect(() => {
@@ -215,7 +214,7 @@ function Chat() {
             <div className="chat-container">
                 <Header setclassName={setclassName} side={side} setside={setside} changeDisplay={changeDisplay} />
                 <main className="chat-main">
-                    <Sidebar className={className} setside={setside} side={side} />
+                    <Sidebar className={className} setCreateC={setCreateC} CreateC={CreateC} setside={setside} side={side} />
                     <div>
                         <div className={className.hideall}>
                             {room ? !dm ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
@@ -236,12 +235,14 @@ function Chat() {
                                                     <p className="ml-auto btn" style={{ "marginBottom": '0' }} onClick={() => { unBlockUser() }} > Un-Block </p>
                                                 </div>
                                                 : ''
-                                : <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "height": "78px" }}>
+                                : CreateC ? <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "height": "78px" }}>
+                                    <h1 style={{'color':'white','marginLeft':'auto','marginRight':'auto','marginBottom':'auto','marginTop':'auto'}} >Create New Channel </h1>
+                                </div> : <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "height": "78px" }}>
 
                                 </div>}
                         </div>
+                        {<Messages CreateC={CreateC} hideall={className.hideall} />}
 
-                        {<Messages hideall={className.hideall} />}
                     </div>
                 </main>
                 <div className={className.hideall} >

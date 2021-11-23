@@ -287,3 +287,11 @@ a {
 .button-logout{
 	margin-left: auto;
 }
+
+.create-channel-header{
+	margin-top: auto;
+	margin-left: auto;
+	margin-bottom: auto;
+	margin-right: auto;
+	width: 333px;
+}

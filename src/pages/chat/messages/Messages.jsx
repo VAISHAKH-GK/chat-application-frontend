@@ -1,7 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import { Context } from '../../../Context';
+import CreateChannel from '../CreateChannel/CreateChannel';
 
-function Messages({hideall}) {
+function Messages({hideall,CreateC}) {
 
     const { messages } = useContext(Context);
 
@@ -12,9 +13,8 @@ function Messages({hideall}) {
 
     return (
         <div className={hideall} >
-
-
             <div style={{ "paddingTop": "10px", "backgroundColor": "#007041" }} className='chat-messages' >
+            {CreateC ? <CreateChannel/> : ''}
                 {
                     messages.length >= 0 ? messages.map((message) => message.chats.map((mess, index) => (
                         <div key={index}>
