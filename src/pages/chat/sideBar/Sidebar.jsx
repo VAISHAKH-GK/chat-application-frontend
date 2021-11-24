@@ -38,7 +38,7 @@ function Sidebar({ className, setside, side, hideall,setCreateC,CreateC }) {
                     showC ? <div>
                         <ul className="channels">
                             <hr />
-                            <p onClick={e => { setroom(null); setDm(false); setRoomName(''); setdmuser();setCreateC(true); }} >Create New Channel </p>
+                            <p onClick={e => { setroom(null); setDm(false); setRoomName(''); setdmuser();setCreateC(true);setside(false); }} >Create New Channel </p>
                             {channels.map((obj, index) => {
                                 return (
                                     <li key={index}><p id="channels" onClick={() => { setroom(obj._id); setside(false);setCreateC(false); setDm(false); setRoomName(obj.name); }} >{obj.name}</p></li>
