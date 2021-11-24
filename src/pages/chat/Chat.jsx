@@ -241,7 +241,7 @@ function Chat() {
 
                                 </div>}
                         </div>
-                        {<Messages CreateC={CreateC} hideall={className.hideall} />}
+                        <Messages CreateC={CreateC} hideall={className.hideall} />
 
                     </div>
                 </main>
