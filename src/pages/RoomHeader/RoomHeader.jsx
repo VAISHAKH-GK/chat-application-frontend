@@ -3,12 +3,12 @@ import { Context } from '../../Context';
 
 
 function Main({ CreateC }) {
-    const { room, dm, who, roomName, addFriend, rejectFriendRequest, removeFriend, acceptFriendRequest, blockUser, unBlockUser, cancelFriendRequest } = useContext(Context);
+    const { room, dm, who, roomName, addFriend, rejectFriendRequest, removeFriend, acceptFriendRequest, blockUser, unBlockUser, cancelFriendRequest, roomOwner } = useContext(Context);
 
     if (room && !dm) {
         return (
             <div style={{ display: "flex", justifyContent: "right", "backgroundColor": "#10422b", "padding": "20px" }}>
-                <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto btn" style={{ "marginBottom": '0' }} > Delete Channel </p> </div>
+                <p className="ml-auto btn roomname" style={{ "marginBottom": '0' }} > {roomName} </p> <p className="ml-auto btn channel-owner " style={{ "marginBottom": '0' }} ><span style={{fontSize:'13px',color:'red'}} > Owner </span> {roomOwner.userName} </p> </div>
         )
     } else if (room) {
         if (who === 'blockedyou') {

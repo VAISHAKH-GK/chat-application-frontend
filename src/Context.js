@@ -20,10 +20,11 @@ export const ContextProvider = function (props) {
     const [login, setlogin] = useState(false);
     const [logeout, setlogout] = useState(false);
     const [userDetails, setuserDetails] = useState(null);
+    const [roomOwner, setRoomOwner] = useState();
 
 
-    function createChannel (channelName) {
-        axios.post(`/createchannel?user=${userDetails.id}`,{channelName}).then((res)=>{
+    function createChannel(channelName) {
+        axios.post(`/createchannel?user=${userDetails.id}`, { channelName }).then((res) => {
             axios.get(`/getchannels?user=${userDetails.userName}`).then((responce) => {
                 setchannels(responce.data);
             });
@@ -35,7 +36,7 @@ export const ContextProvider = function (props) {
             <Context.Provider value={{
                 messages, setMessages, room, setroom, dm, setDm, dmuser, setdmuser, who, setWho, channels,
                 setchannels, users, setusers, friendRequests, setFriendRequests, roomName, setRoomName, friends,
-                setFriends, login, logeout, setlogin, setlogout,userDetails,setuserDetails,createChannel
+                setFriends, login, logeout, setlogin, setlogout, userDetails, setuserDetails, createChannel, roomOwner, setRoomOwner
             }} >
                 {props.children}
             </Context.Provider>

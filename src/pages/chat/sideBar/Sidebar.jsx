@@ -11,7 +11,7 @@ function Sidebar({ className, setside, side, hideall,setCreateC,CreateC }) {
     const [showFR, setShowFR] = useState(false);
     const [showF, setShowF] = useState(false);
 
-    const { setroom, userDetails, setRoomName, friends, setDm, channels, users, friendRequests, setdmuser } = useContext(Context);
+    const { setroom, userDetails, setRoomName, friends, setDm, channels, users, friendRequests, setdmuser, setRoomOwner } = useContext(Context);
 
     return (
         <div className={hideall}>
@@ -41,7 +41,7 @@ function Sidebar({ className, setside, side, hideall,setCreateC,CreateC }) {
                             <p onClick={e => { setroom(null); setDm(false); setRoomName(''); setdmuser();setCreateC(true);setside(false); }} >Create New Channel </p>
                             {channels.map((obj, index) => {
                                 return (
-                                    <li key={index}><p id="channels" onClick={() => { setroom(obj._id); setside(false);setCreateC(false); setDm(false); setRoomName(obj.name); }} >{obj.name}</p></li>
+                                    <li key={index}><p id="channels" onClick={() => { setroom(obj._id); setside(false);setCreateC(false); setDm(false); setRoomName(obj.name); setRoomOwner(obj.ownerDetails); }} >{obj.name}</p></li>
                                 )
                             })}
                         </ul>
