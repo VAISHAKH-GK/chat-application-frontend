@@ -139,6 +139,9 @@ function Chat() {
             axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
                 setWho(res.data);
                 socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
+                axios.get(`/getfriends?user=${userDetails.id}`).then((friends) => {
+                    setFriends(friends.data);
+                });
             });
         })
 
@@ -169,6 +172,9 @@ function Chat() {
                 axios.get(`/getfriendrequests?user=${userDetails.id}`).then((friendReq) => {
                     setFriendRequests(friendReq.data);
                 });
+                axios.get(`/getfriends?user=${userDetails.id}`).then((friends) => {
+                    setFriends(friends.data);
+                });
             });
         });
     }
@@ -180,6 +186,9 @@ function Chat() {
                 socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
                 axios.get(`/getfriendrequests?user=${userDetails.id}`).then((friendReq) => {
                     setFriendRequests(friendReq.data);
+                });
+                axios.get(`/getfriends?user=${userDetails.id}`).then((friends) => {
+                    setFriends(friends.data);
                 });
             });
         })
@@ -213,7 +222,7 @@ function Chat() {
     return (
         <div>
             <div className="chat-container">
-                <Header setclassName={setclassName} side={side} setside={setside} changeDisplay={changeDisplay} />
+                <Header setclassName={setclassName} side={side} setside={setside} changeDisplay={changeDisplay}  />
                 <main className="chat-main">
                     <Sidebar className={className} setCreateC={setCreateC} CreateC={CreateC} setside={setside} side={side} />
                     <div>

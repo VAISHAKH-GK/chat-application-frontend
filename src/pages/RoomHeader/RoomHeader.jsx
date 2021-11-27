@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { Context } from '../../Context';
 
 
-function Main({ CreateC }) {
-    const { room, dm, who, roomName, addFriend, rejectFriendRequest, removeFriend, acceptFriendRequest, blockUser, unBlockUser, cancelFriendRequest, roomOwner } = useContext(Context);
+function Main({ CreateC , addFriend, rejectFriendRequest, removeFriend, acceptFriendRequest, blockUser, unBlockUser, cancelFriendRequest}) {
+    const { room, dm, who, roomName, roomOwner } = useContext(Context);
 
     if (room && !dm) {
         return (
@@ -60,9 +60,10 @@ function Main({ CreateC }) {
         <div />
     )
 }
-function RoomHeader({ CreateC }) {
+function RoomHeader({ CreateC , addFriend, rejectFriendRequest, removeFriend, acceptFriendRequest, blockUser, unBlockUser, cancelFriendRequest }) {
     return (
-        <Main CreateC={CreateC} />
+        <Main CreateC={CreateC} addFriend={addFriend} rejectFriendRequest={rejectFriendRequest} removeFriend={removeFriend} 
+        acceptFriendRequest={acceptFriendRequest} blockUser={blockUser} unBlockUser={unBlockUser} cancelFriendRequest={cancelFriendRequest} />
     )
 }
 
