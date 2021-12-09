@@ -15,12 +15,9 @@ function Messages({ hideall, CreateC }) {
         if (!dmuser) return ;
         if (dmuser.friends) {
             dmuser.friends.map((friend, index) => {
-                console.log(dmuser);
                 setdmuserfriend(friend);
             })
-        } else {
-            console.log(dmuser);
-        }
+        } 
     }, [dmuser]);
 
     const [dmuserfriend,setdmuserfriend] = useState('');

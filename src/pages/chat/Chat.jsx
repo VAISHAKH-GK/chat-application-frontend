@@ -103,7 +103,7 @@ function Chat() {
                 });
             }
         }
-        return () => { socket.off(room); if (userDetails ) { socket.off(userDetails.id + dmuser._id); socket.off(dmuser._id + userDetails.id); } };
+        return () => { console.log('hello'); console.log(dmuser); socket.off(room); if (userDetails ) { socket.off(userDetails.id + dmuser._id); socket.off(dmuser._id + userDetails.id); } };
 
     }, [room]);
 
