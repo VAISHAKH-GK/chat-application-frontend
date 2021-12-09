@@ -22,6 +22,8 @@ export const ContextProvider = function (props) {
     const [userDetails, setuserDetails] = useState(null);
     const [roomOwner, setRoomOwner] = useState();
 
+    const [showProfile,setShowProfile] = useState(false);
+
 
     function createChannel(channelName) {
         axios.post(`/createchannel?user=${userDetails.id}`, { channelName }).then((res) => {
@@ -36,7 +38,7 @@ export const ContextProvider = function (props) {
             <Context.Provider value={{
                 messages, setMessages, room, setroom, dm, setDm, dmuser, setdmuser, who, setWho, channels,
                 setchannels, users, setusers, friendRequests, setFriendRequests, roomName, setRoomName, friends,
-                setFriends, login, logeout, setlogin, setlogout, userDetails, setuserDetails, createChannel, roomOwner, setRoomOwner
+                setFriends, login, logeout, setlogin, setlogout, userDetails, setuserDetails, createChannel, roomOwner, setRoomOwner,showProfile,setShowProfile
             }} >
                 {props.children}
             </Context.Provider>

@@ -17,7 +17,7 @@ function Chat() {
 
 
     const { setMessages, room, dm, dmuser, who, setWho, setchannels,
-        setusers, setFriendRequests, roomName, setFriends, userDetails, setlogout, setuserDetails, setlogin } = useContext(Context);
+        setusers, setFriendRequests, roomName, setFriends, userDetails, setlogout, setuserDetails, setlogin, setdmuser } = useContext(Context);
 
     const [className, setclassName] = useState({ sidebar: "chat-sidebar", showmc: 'hidemsg', hideall: 'hide-all' });
     const [side, setside] = useState(true);
@@ -32,7 +32,7 @@ function Chat() {
             userId: userDetails.id
         }
         if (dm) {
-            ms.receiver = dmuser;
+            ms.receiver = dmuser._id;
             socket.emit('dmMessage', ms);
         } else {
             socket.emit("message", ms);
@@ -82,8 +82,8 @@ function Chat() {
     }, []);
 
     useEffect(() => {
-        if (dm && dmuser) {
-            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+        if (dm && dmuser._id) {
+            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                 setWho(res.data);
             });
         }
@@ -94,14 +94,16 @@ function Chat() {
             setMessages(message => [...message, msg]);
         });
         if (userDetails) {
-            socket.on(userDetails.id + dmuser, (msg) => {
-                setMessages(message => [...message, msg]);
-            });
-            socket.on(dmuser + userDetails.id, (msg) => {
-                setMessages(message => [...message, msg]);
-            });
+            if (dmuser) {
+                socket.on(userDetails.id + dmuser._id, (msg) => {
+                    setMessages(message => [...message, msg]);
+                });
+                socket.on(dmuser._id + userDetails.id, (msg) => {
+                    setMessages(message => [...message, msg]);
+                });
+            }
         }
-        return () => { socket.off(room); if (userDetails) { socket.off(userDetails.id + dmuser); socket.off(dmuser + userDetails.id); } };
+        return () => { socket.off(room); if (userDetails ) { socket.off(userDetails.id + dmuser._id); socket.off(dmuser._id + userDetails.id); } };
 
     }, [room]);
 
@@ -117,28 +119,29 @@ function Chat() {
 
 
     useEffect(() => {
-        if (dmuser && room && dm) {
-            axios.get(`/dmuser?senter=${userDetails.id}&receiver=${dmuser}`).then((message) => {
+        if (!dmuser) return ;
+        if (dmuser._id && room && dm) {
+            axios.get(`/dmuser?senter=${userDetails.id}&receiver=${dmuser._id}`).then((message) => {
                 setMessages(message.data);
             })
         }
     }, [dmuser, dm]);
 
     function addFriend() {
-        axios.patch(`/addFriend?user=${userDetails.id}&friend=${dmuser}`).then(() => {
-            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+        axios.patch(`/addFriend?user=${userDetails.id}&friend=${dmuser._id}`).then(() => {
+            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                 setWho(res.data);
-                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
+                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser._id });
             });
 
         });
     }
 
     function removeFriend() {
-        axios.patch(`/removefriend?user=${userDetails.id}&friend=${dmuser}`).then(() => {
-            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+        axios.patch(`/removefriend?user=${userDetails.id}&friend=${dmuser._id}`).then(() => {
+            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                 setWho(res.data);
-                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
+                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser._id });
                 axios.get(`/getfriends?user=${userDetails.id}`).then((friends) => {
                     setFriends(friends.data);
                 });
@@ -148,47 +151,53 @@ function Chat() {
     }
     useEffect(() => {
         if (!userDetails || !dmuser) return;
-        socket.on('whochanged' + userDetails.id + dmuser, () => {
-            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+        socket.on('whochanged' + userDetails.id + dmuser._id, () => {
+            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                 setWho(res.data);
             });
         });
     }, [dmuser, userDetails])
 
     function cancelFriendRequest() {
-        axios.patch(`/cancelfriendrequest?user=${userDetails.id}&friend=${dmuser}`).then(() => {
-            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+        axios.patch(`/cancelfriendrequest?user=${userDetails.id}&friend=${dmuser._id}`).then(() => {
+            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                 setWho(res.data);
-                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
+                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser._id });
             });
         });
     }
 
     function acceptFriendRequest() {
-        axios.patch(`acceptfriendrequest?user=${userDetails.id}&friend=${dmuser}`).then(() => {
-            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+        axios.patch(`acceptfriendrequest?user=${userDetails.id}&friend=${dmuser._id}`).then(() => {
+            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                 setWho(res.data);
-                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
+                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser._id });
                 axios.get(`/getfriendrequests?user=${userDetails.id}`).then((friendReq) => {
                     setFriendRequests(friendReq.data);
                 });
                 axios.get(`/getfriends?user=${userDetails.id}`).then((friends) => {
                     setFriends(friends.data);
+                });
+                axios.get(`/getuserdetails?user=${dmuser._id}`).then((userDetails) => {
+                    setdmuser(userDetails);
                 });
             });
         });
     }
 
     function rejectFriendRequest() {
-        axios.patch(`/rejectfriendrequest?user=${userDetails.id}&friend=${dmuser}`).then(() => {
-            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+        axios.patch(`/rejectfriendrequest?user=${userDetails.id}&friend=${dmuser._id}`).then(() => {
+            axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                 setWho(res.data);
-                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
+                socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser._id });
                 axios.get(`/getfriendrequests?user=${userDetails.id}`).then((friendReq) => {
                     setFriendRequests(friendReq.data);
                 });
                 axios.get(`/getfriends?user=${userDetails.id}`).then((friends) => {
                     setFriends(friends.data);
+                });
+                axios.get(`/getuserdetails?user=${dmuser._id}`).then((userDetails) => {
+                    setdmuser(userDetails.data);
                 });
             });
         })
@@ -196,10 +205,10 @@ function Chat() {
 
     function blockUser() {
         if (window.confirm(`Are you sure to block ${roomName} ?  `)) {
-            axios.patch(`/blockuser?user=${userDetails.id}&block=${dmuser}`).then(() => {
-                axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+            axios.patch(`/blockuser?user=${userDetails.id}&block=${dmuser._id}`).then(() => {
+                axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                     setWho(res.data);
-                    socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
+                    socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser._id });
                 });
                 axios.get(`/getfriendrequests?user=${userDetails.id}`).then((friendReq) => {
                     setFriendRequests(friendReq.data);
@@ -210,10 +219,10 @@ function Chat() {
 
     function unBlockUser() {
         if ((window.confirm(`Are you sure to Unblock ${roomName} ? `))) {
-            axios.patch(`unblockuser?user=${userDetails.id}&block=${dmuser}`).then(() => {
-                axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser}`).then((res) => {
+            axios.patch(`unblockuser?user=${userDetails.id}&block=${dmuser._id}`).then(() => {
+                axios.get(`/getwho?user=${userDetails.id}&otheruser=${dmuser._id}`).then((res) => {
                     setWho(res.data);
-                    socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser });
+                    socket.emit('changeOnWho', { 'sent': userDetails.id, 'receive': dmuser._id });
                 });
             });
         }
@@ -222,7 +231,7 @@ function Chat() {
     return (
         <div>
             <div className="chat-container">
-                <Header setclassName={setclassName} side={side} setside={setside} changeDisplay={changeDisplay}  />
+                <Header setclassName={setclassName} side={side} setside={setside} changeDisplay={changeDisplay} />
                 <main className="chat-main">
                     <Sidebar className={className} setCreateC={setCreateC} CreateC={CreateC} setside={setside} side={side} />
                     <div>
