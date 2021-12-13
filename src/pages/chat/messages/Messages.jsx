@@ -1,10 +1,12 @@
+import axios from 'axios';
 import React, { useEffect, useContext, useState } from 'react';
 import { Context } from '../../../Context';
 import CreateChannel from '../CreateChannel/CreateChannel';
 
-function Messages({ hideall, CreateC }) {
+function Messages({ hideall, CreateC, setside }) {
 
-    const { messages, showProfile, dmuser } = useContext(Context);
+    const { messages, showProfile, dmuser, setShowProfile, setRoomName, setdmuser, setDm, setroom, userDetails } = useContext(Context);
+    const [dmuserfriend, setdmuserfriend] = useState([]);
 
     useEffect(() => {
         var cm = document.querySelector('.chat-messages');
@@ -12,15 +14,24 @@ function Messages({ hideall, CreateC }) {
     }, [messages]);
 
     useEffect(() => {
-        if (!dmuser) return ;
-        if (dmuser.friends) {
-            dmuser.friends.map((friend, index) => {
-                setdmuserfriend(friend);
-            })
-        } 
+
     }, [dmuser]);
 
-    const [dmuserfriend,setdmuserfriend] = useState('');
+    useEffect(() => {
+
+        if (!dmuser) return;
+        if (showProfile) {
+            if (dmuser.friends) {
+                setdmuserfriend([]);
+                dmuser.friends.map((id, index) => {
+                    axios.get(`/getuserdetails?user=${id}`).then((details) => {
+                        setdmuserfriend([dmuserfriend, details.data]);
+                    });
+                });
+            }
+        }
+
+    }, [showProfile, dmuser]);
 
     return (
         <div className={hideall} >
@@ -39,8 +50,14 @@ function Messages({ hideall, CreateC }) {
                         ) : '' : <div>
                             <div>
                                 <div style={{ backgroundColor: 'lime' }} >
-                                    <h1 style={{ textAlign: 'center' }} >User Name : <span style={{ color: 'red' }} >{dmuser.userName}</span> </h1>
-                                    <h1>{dmuserfriend}</h1>
+                                    <h1 style={{ textAlign: 'center' }} >User Name : <span style={{ color: 'red' }}  >{dmuser.userName}</span> </h1>
+                                    <h1 style={{ textAlign: 'center' }}  >Friends</h1>
+                                    {dmuserfriend.length === 0 ? <h1 style={{ textAlign: 'center', color: 'purple' }} > This user dont have any friends </h1> : dmuserfriend.map((user, index) => {
+                                        return (
+                                            user._id !== userDetails.id ? <h1 style={{ textAlign: 'center', color: 'blue' }} key={index} onClick={() => { setroom(user._id); setside(false); setDm(true); setdmuser(user); setRoomName(user.userName); setShowProfile(false); }}  >{user.userName}</h1>
+                                                : ''
+                                        )
+                                    })}
                                 </div>
                             </div>
                         </div>

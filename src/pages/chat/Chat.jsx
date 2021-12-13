@@ -238,7 +238,7 @@ function Chat() {
                         <div className={className.hideall}>
                             <RoomHeader CreateC={CreateC} removeFriend={removeFriend} rejectFriendRequest={rejectFriendRequest} addFriend={addFriend} blockUser={blockUser} unBlockUser={unBlockUser} acceptFriendRequest={acceptFriendRequest} cancelFriendRequest={cancelFriendRequest} />
                         </div>
-                        <Messages CreateC={CreateC} hideall={className.hideall} />
+                        <Messages CreateC={CreateC} hideall={className.hideall} setside={setside} />
                     </div>
                 </main>
                 <div className={className.hideall} >
