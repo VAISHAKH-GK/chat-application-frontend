@@ -53,9 +53,10 @@ function Messages({ hideall, CreateC, setside }) {
                                     <h1 style={{ textAlign: 'center' }} >User Name : <span style={{ color: 'red' }}  >{dmuser.userName}</span> </h1>
                                     <h1 style={{ textAlign: 'center' }}  >Friends</h1>
                                     {dmuserfriend.length === 0 ? <h1 style={{ textAlign: 'center', color: 'purple' }} > This user dont have any friends </h1> : dmuserfriend.map((user, index) => {
+
                                         return (
                                             user._id !== userDetails.id ? <h1 style={{ textAlign: 'center', color: 'blue' }} key={index} onClick={() => { setroom(user._id); setside(false); setDm(true); setdmuser(user); setRoomName(user.userName); setShowProfile(false); }}  >{user.userName}</h1>
-                                                : ''
+                                            : <h1 style={{textAlign:'center',color:'purple'}} >You</h1>
                                         )
                                     })}
                                 </div>

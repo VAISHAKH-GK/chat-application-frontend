@@ -14,8 +14,6 @@ const socket = io('http://localhost:9000');
 
 function Chat() {
 
-
-
     const { setMessages, room, dm, dmuser, who, setWho, setchannels,
         setusers, setFriendRequests, roomName, setFriends, userDetails, setlogout, setuserDetails, setlogin, setdmuser } = useContext(Context);
 
@@ -87,7 +85,8 @@ function Chat() {
                 setWho(res.data);
             });
         }
-    }, [dmuser])
+    }, [dmuser]);
+
 
     useEffect(() => {
         socket.on(room, (msg) => {
@@ -103,6 +102,7 @@ function Chat() {
                 });
             }
         }
+
         return () => { console.log('hello'); console.log(dmuser); socket.off(room); if (userDetails ) { socket.off(userDetails.id + dmuser._id); socket.off(dmuser._id + userDetails.id); } };
 
     }, [room]);
